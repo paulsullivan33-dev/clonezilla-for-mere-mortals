@@ -1,0 +1,62 @@
+$ 7z l clonezilla-live-3.3.3-37-amd64.iso
+Type = Iso
+Physical Size = 505413632
+Created = 2026-09-13 05:14:56
+
+(the entries that matter; the full listing runs to 377 lines,
+ most of them GRUB modules under boot/grub/x86_64-efi/)
+
+.disk/info                                    72 bytes
+Clonezilla-Live-Version                      228 bytes
+EFI/boot/bootx64.efi                     1,088,816 bytes
+EFI/boot/grubx64.efi                     2,405,824 bytes
+boot/grub/grub.cfg                          11,444 bytes
+boot/grub/efi.img                        3,538,944 bytes
+syslinux/isolinux.bin                       40,960 bytes
+syslinux/isolinux.cfg                       10,158 bytes
+live/vmlinuz                            14,202,816 bytes
+live/initrd.img                         51,411,804 bytes
+live/filesystem.squashfs               420,614,144 bytes
+live/filesystem.packages                    22,751 bytes
+live/freedos.img                         1,474,560 bytes
+live/ipxe.efi                            1,049,600 bytes
+live/mt86+x64                              164,352 bytes  (Memtest86+)
+utils/win32/syslinux.exe, utils/win64/syslinux64.exe
+utils/linux/x64/syslinux, utils/linux/x86/syslinux
+
+$ cat Clonezilla-Live-Version
+clonezilla-live-3.3.3-37-amd64
+This Clonezilla live iso file was created by this command:
+ocs-iso --quiet -s -j debian-live-for-ocs-3.3.3-37-amd64.iso --extra-boot-param loglevel=3 hostname=cl-3.3.3-37 -y 6.03 -i 3.3.3-37-amd64
+(the ISO was itself built by a Clonezilla tool, ocs-iso)
+
+$ cat .disk/info
+Debian GNU/Linux none "Sid" - Snapshot amd64 LIVE Binary 20260913-13:09
+
+$ grep menuentry boot/grub/grub.cfg
+menuentry "Clonezilla live (VGA 800x600)" --id live-default
+menuentry "Clonezilla live (VGA 800x600 & To RAM)" --id live-toram
+menuentry "Clonezilla live (VGA with large font & To RAM)"
+menuentry "Clonezilla live (Verify integrity of the boot medium)"
+menuentry "Clonezilla live (Speech synthesis)"
+... (plus 1024x768, 640x480, KMS and failsafe variants)
+set default="0"
+set timeout="30"
+
+$ grep '^label' syslinux/isolinux.cfg
+label Clonezilla live
+label Clonezilla live (To RAM)
+label Clonezilla live HiDPI
+label Verify integrity of the boot medium
+label Clonezilla live speech synthesis
+label Clonezilla live 1024x768
+label Clonezilla live 640x480
+label Clonezilla live KMS
+label Clonezilla live KMS & To RAM
+label Clonezilla live KMS, To RAM & large font
+label Clonezilla live without framebuffer
+label Clonezilla live failsafe mode
+label local          (boot from the local disk instead)
+label memtest (64 bits)
+label FreeDOS
+label iPXE

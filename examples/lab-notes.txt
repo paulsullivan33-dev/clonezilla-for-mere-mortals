@@ -1,0 +1,52 @@
+The lab — one real release, dissected; one real engine, run
+====================================================================
+
+The lab is an Ubuntu 24.04 sandbox (2 CPUs,
+7.7 GB RAM) that worked with the real
+release and the real engine:
+
+  * Clonezilla live 3.3.3-37 (Debian-based
+    stable, amd64), downloaded from the
+    project's SourceForge archive:
+    505,413,632 bytes, SHA-256 matching the
+    project's published CHECKSUMS.TXT
+    exactly (also MD5). Inside it: Debian
+    sid, clonezilla 5.18.11-drbl1, drbl
+    5.11.9-drbl2, partclone 0.3.50.
+  * On the lab machine itself, Ubuntu's
+    packages: partclone 0.3.27 and
+    clonezilla 5.5.25-1 — older than the
+    live system's own, and the guide says
+    so where it could matter.
+  * The practice filesystem: an invented
+    workshop field-notes folder (six small
+    files, checksummed), built into a
+    64 MiB ext4 image by mkfs.ext4 -d with
+    no loop device and no mount.
+
+The sandbox's rules, discovered by running
+into them (each is a transcript in
+clonezilla-lab/transcripts/):
+
+  * No loop devices exist and none can be
+    created (t90): no pretend disks, for
+    any tool, ever.
+  * The machine has no spare disk and
+    cannot boot a live system; its own
+    disks were never candidates for an
+    imaging tool and were never touched.
+  * The ocs-* scripts check their
+    surroundings and refuse off-live
+    (t90): their usage text is real and
+    was captured (t03, t07); their work
+    was not performed here.
+
+What that makes the guide: the download,
+the release's anatomy and the partclone
+engine are verified from the machine's own
+evidence (t00-t07). The live session —
+the dialogs, a real save, a real restore,
+a real boot afterwards — is taught from
+the project's documentation and labelled
+documented-only in chapters 4, 5, 6, 7
+and wherever else it appears.

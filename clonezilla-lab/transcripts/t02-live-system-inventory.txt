@@ -1,0 +1,50 @@
+$ unsquashfs -l live/filesystem.squashfs | wc -l
+47500
+(the whole live operating system: 47,500 files in one
+ 420,614,144-byte squashfs, listed without unpacking it)
+
+$ cat etc/os-release   (extracted from the squashfs)
+PRETTY_NAME="Debian GNU/Linux forky/sid"
+NAME="Debian GNU/Linux"
+VERSION_CODENAME=sid
+
+$ ls usr/sbin/ocs-* | wc -l        (inside the squashfs)
+83
+(83 ocs-* programs: ocs-sr, ocs-live-general, ocs-chkimg,
+ ocs-encrypt-img, ocs-decrypt-img, ocs-cvtimg-comp, ocs-restore-mdisks...)
+
+$ ls usr/sbin/partclone.*         (inside the squashfs)
+partclone.apfs     partclone.btrfs    partclone.chkimg
+partclone.dd       partclone.exfat    partclone.ext2
+partclone.ext3     partclone.ext4     partclone.ext4dev
+partclone.extfs    partclone.f2fs     partclone.fat
+partclone.fat12    partclone.fat16    partclone.fat32
+partclone.hfs+     partclone.hfsp     partclone.hfsplus
+partclone.imager   partclone.info     partclone.minix
+partclone.ntfs     partclone.ntfsfixboot  partclone.ntfsreloc
+partclone.reiser4  partclone.restore  partclone.vfat
+partclone.xfs
+
+$ grep -E '^(clonezilla|drbl|partclone|parted|gdisk|zstd|pigz|lbzip2|pbzip2|ntfs-3g)' live/filesystem.packages
+clonezilla	5.18.11-drbl1
+drbl		5.11.9-drbl2
+gdisk		1.0.10-3
+lbzip2		2.5-5
+ntfs-3g		1:2026.7.7-2
+partclone	0.3.50-drblsid~202609122232
+partclone-utils	0.4.3-drbl1
+parted		3.7-1
+pbzip2		1.1.13-1
+pigz		2.8-2
+zstd		1.5.7+dfsg-4
+(the package list of the live system, printed in the ISO
+ itself at live/filesystem.packages)
+
+For comparison, the lab's own machine, Ubuntu 24.04 packages:
+
+$ apt-get install -y partclone clonezilla squashfs-tools
+partclone 0.3.27+repack-2build2, clonezilla 5.5.25-1
+(the Ubuntu packages are older than the live system's own
+ 5.18.11 / 0.3.50 — the usage text and behaviour exercised
+ in transcripts t03-t06 are the Ubuntu builds', and the
+ chapters say so where the difference could matter)

@@ -1,0 +1,58 @@
+Clonezilla — the distilled commands
+====================================================================
+Placeholders: <image> is an image name in the
+repository (/home/partimag); <disk> is a device
+name like sda; <part> a partition like sda1.
+The ocs-* commands run inside the booted live
+system. The partclone commands run anywhere.
+
+THE WIZARD'S OWN GRAMMAR (chapter 2)
+--------------------------------------------------------------------
+  ocs-sr [OPTION] {savedisk|saveparts|restoredisk|restoreparts} <image> <disk>
+  # IMAGE is the image dir name in /home/partimag,
+  # not an absolute path; DEVICE with or without /dev/
+
+SAVING — the flags behind the dialog (chapters 5, 10)
+--------------------------------------------------------------------
+  ocs-sr -q2 -c -j2 -z9p -i 4096 -sfsck -p choose savedisk <image> <disk>
+                                   # the shape of a wizard-built
+                                   # command; read yours before y
+  -z0 none   -z1 gzip   -z1p pigz   -z2p lbzip2
+  -z9 zstd   -z9p parallel zstd    # the compression shelf
+  -i 4096                            # split image into 4096 MB volumes
+  -gm / -gs                          # write MD5 / SHA1 sums with the image
+  -cm / -cs                          # verify them again at restore
+  -enc, -pe <pass>                   # encrypt the image as it is saved
+  -q                                 # prefer ntfsclone for NTFS
+  -q1                                # force dd (the blunt fallback)
+
+CHECKING AND CONVERTING (chapter 10)
+--------------------------------------------------------------------
+  ocs-chkimg <image> <part>          # test-restore: is it whole?
+  ocs-cvtimg-comp -z9p <old> <new>   # re-stream through another compressor
+  ocs-encrypt-img <plain> <encrypted>
+  ocs-decrypt-img <encrypted> <plain>
+  partclone.chkimg -s <stream>       # the same check, one stream at a time
+  partclone.info <stream>            # an image describes itself:
+                                     # device size, space in use, format
+
+PARTCLONE BY HAND (chapter 9 — anywhere, no live system)
+--------------------------------------------------------------------
+  partclone.ext4 -c -s <src> -o <img>          # save (used blocks only)
+  partclone.ext4 -c -x zstd -s <src> -o <img>  # save, through zstd
+  partclone.ext4 -r -s <img> -O <target>       # restore; -O overwrites,
+                                               # and it will refuse without it
+  zstd -dc <img>.zst | partclone.ext4 -r -s - -O <target>
+                                               # restore a compressed image
+  # one binary per filesystem: partclone.ntfs, .btrfs, .xfs, .fat ...
+
+A FILESYSTEM INSIDE A FILE (chapter 9's safe practice ground)
+--------------------------------------------------------------------
+  truncate -s 64M src.img
+  mkfs.ext4 -q -F -L FIELDNOTES -d <srcdir> src.img
+                                   # -d populates it; no loop, no mount
+  dumpe2fs -h src.img              # the filesystem's own report
+  debugfs -R 'ls -l /' src.img     # list it, still unmounted
+  debugfs -R 'dump -p /path/file out' src.img
+                                   # extract one file for checksumming
+  e2fsck -fn <restored.img>        # check a restore like you mean it

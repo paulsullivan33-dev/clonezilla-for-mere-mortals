@@ -1,0 +1,41 @@
+$ timeout 10 ocs-chkimg -h </dev/null
+/usr/sbin/ocs-chkimg: -h: invalid option
+ocs-chkimg - To check the image of Clonezilla
+Usage:
+To run ocs-chkimg:
+ocs-chkimg [OPTION] IMAGE DEVICE
+IMAGE is the image dir name, not absolute path
+DEVICE is the device name (not whole disk, only partition), e.g., sda1, sda2, or /dev/sda1, /dev/sda2...
+If "ask_user" is used as IMAGE or DEVICE, a dialog menu will be shown to allow selection.
+If no DEVICE is specified, all of the devices will be checked.
+
+$ timeout 10 ocs-cvtimg-comp -h </dev/null
+/usr/sbin/ocs-cvtimg-comp: -h: invalid option
+ocs-cvtimg-comp - To convert the image of Clonezilla from existing compression format to another one
+Usage:
+ocs-cvtimg-comp [OPTION] SRC_IMAGE_NAME DEST_IMAGE_NAME
+Options:
+-b, --batch-mode   Run image checking in batch mode
+-sc, --skip-check-restorable  Skip checking the image if restorable after it is converted.
+-z0, --no-compress       Convert to uncompression format
+-z1, --gzip-compress     Convert to gzip format
+... (the same -z shelf as ocs-sr, transcript t03)
+
+$ timeout 10 ocs-encrypt-img -h </dev/null
+/usr/sbin/ocs-encrypt-img: -h: invalid option
+ocs-encrypt-img - To encrypt the image of Clonezilla from existing one
+Usage:
+ocs-encrypt-img [OPTION] SRC_IMAGE_NAME DEST_IMAGE_NAME
+Options:
+-b, --batch-mode   Run image checking in batch mode
+-d, --delete-src-img     Force to delete source image after encryption. By default it's kept.
+
+$ timeout 10 ocs-decrypt-img -h </dev/null
+/usr/sbin/ocs-decrypt-img: -h: invalid option
+ocs-decrypt-img - To decrypt the image of Clonezilla from existing one
+Usage:
+ocs-decrypt-img [OPTION] SRC_IMAGE_NAME DEST_IMAGE_NAME
+Options:
+-b, --batch-mode   Run image checking in batch mode
+-d, --delete-src-img     Force to delete source image after encryption. By default it's kept.
+-nogui, --nogui          Do not show GUI (TUI) of Partclone when checking, use text only

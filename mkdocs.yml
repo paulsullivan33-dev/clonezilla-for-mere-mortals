@@ -1,0 +1,27 @@
+site_name: Clonezilla for Mere Mortals
+site_description: Whole-disk imaging with a live system you boot from a stick. Saving a disk or its partitions into an image that holds only the blocks in use, keeping that image honestly, checking it before you trust it, and restoring it onto the same disk or a new one, with the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/clonezilla-for-mere-mortals/
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What Clonezilla Is: what-clonezilla-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Getting Clonezilla: getting-clonezilla.md
+  - Making the Boot Medium: making-the-boot-medium.md
+  - Your First Save: your-first-save.md
+  - Restoring an Image: restoring-an-image.md
+  - Device to Device: device-to-device.md
+  - The Image Itself: the-image-itself.md
+  - Partclone by Hand: partclone-by-hand.md
+  - Checking and Converting Images: checking-and-converting-images.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

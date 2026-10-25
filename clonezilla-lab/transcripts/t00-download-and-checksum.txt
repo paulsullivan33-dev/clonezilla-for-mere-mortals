@@ -1,0 +1,20 @@
+$ curl -s https://clonezilla.org/downloads.php
+(stable, Debian-based: 3.3.3-37; alternative stable:
+20260913-resolute, Ubuntu-based; testing: 3.3.4-16)
+
+$ curl -s https://clonezilla.org/downloads/stable/data/CHECKSUMS.TXT
+### SHA256SUMS:
+3079458d926a37d3533e5d5caeb61b6e49c2dc69e2c97e0332ef37986bb3414f  clonezilla-live-3.3.3-37-amd64.iso
+
+$ curl -sL -o clonezilla-live-3.3.3-37-amd64.iso \
+    https://sourceforge.net/projects/clonezilla/files/clonezilla_live_stable/3.3.3-37/clonezilla-live-3.3.3-37-amd64.iso/download
+
+$ ls -l clonezilla-live-3.3.3-37-amd64.iso
+-rw-rw---- 1 root root 505413632 Oct 25 02:19 clonezilla-live-3.3.3-37-amd64.iso
+
+$ sha256sum clonezilla-live-3.3.3-37-amd64.iso
+3079458d926a37d3533e5d5caeb61b6e49c2dc69e2c97e0332ef37986bb3414f  clonezilla-live-3.3.3-37-amd64.iso
+
+$ md5sum clonezilla-live-3.3.3-37-amd64.iso
+0a5a4a795ce9cfb7059870290bcbc421  clonezilla-live-3.3.3-37-amd64.iso
+(both sums match the project's published CHECKSUMS.TXT exactly)

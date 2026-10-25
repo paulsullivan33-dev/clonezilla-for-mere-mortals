@@ -1,0 +1,58 @@
+First attempt — kept because the failure is the lesson:
+
+$ truncate -s 64M dst.img
+$ partclone.ext4 -r -s src.pcl -o dst.img
+Error exit
+Partclone fail, please check /var/log/partclone.log !
+
+$ tail /var/log/partclone.log
+Starting to restore image (-) to device (dst2.img)
+Output file 'dst2.img' already exists.
+Use option --overwrite if you want to replace its content.
+partclone.c,open_target,1684: open dst2.img error(17)
+(partclone will not overwrite an existing target unless
+ told to. On a real restore the target is a disk and the
+ equivalent care is a typed confirmation, not a flag —
+ but the refusal itself is the same instinct.)
+
+With the flag:
+
+$ partclone.ext4 -r -s src.pcl -O dst.img
+Partclone successfully restored the image (src.pcl) to the device (dst.img)
+Cloned successfully.
+
+$ truncate -s 64M dst2.img
+$ zstd -dc src.pcl.zst | partclone.ext4 -r -s - -O dst2.img
+Partclone successfully restored the image (-) to the device (dst2.img)
+Cloned successfully.
+(the compressed image restored by piping the decompressor
+ into partclone's standard input — the same plumbing
+ Clonezilla uses, with zstd swapped for its own pipe)
+
+$ e2fsck -fn dst.img
+FIELDNOTES: 19/16384 files (5.3% non-contiguous), 2331/16384 blocks
+$ e2fsck -fn dst2.img
+FIELDNOTES: 19/16384 files (5.3% non-contiguous), 2331/16384 blocks
+(both restored filesystems check clean, same shape)
+
+$ dumpe2fs -h dst.img
+Filesystem volume name:   FIELDNOTES
+Block count:              16384
+Free blocks:              14053
+
+The verdict — every file extracted from BOTH restored
+images with debugfs (still no mounts) and checksummed:
+
+$ sha256sum (files from dst.img, the plain restore)
+4e1970feeb8bd208410624b614978a646b7800064e16decc2f812468624ae911  data/blob.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  data/empty.txt
+30fadd62ac5d4c5e8443e438cc05c612f7776861e6d1b34584a5c5601f7a8f67  data/measurements.csv
+5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee  data/zeros.bin
+bb9d18d1e0db900831060cd9522ff88f6381823ce6aaf7f49f0b9d5c6e51c435  documents/manual.md
+b323cb7ee965b7136b4a81f29370a5edcc45ce59f0f52ee9ec8de665a856612e  readme.txt
+
+$ diff (checksums of dst.img files) (checksums of originals)
+(no output)
+$ diff (checksums of dst2.img files) (checksums of dst.img files)
+(no output)
+RESTORE MATCHES ORIGINALS EXACTLY

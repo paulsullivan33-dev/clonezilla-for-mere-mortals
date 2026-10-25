@@ -1,0 +1,28 @@
+Why this guide has no transcript of an actual Clonezilla
+session: the lab machine's own limits, run into and kept.
+
+$ ls /dev/loop*
+ls: cannot access '/dev/loop*': No such file or directory
+
+$ losetup -f
+losetup: cannot find an unused loop device: No such file or directory
+(no loop devices at all — no way to give any tool a
+ pretend disk, and the sandbox has no spare real disk.
+ Pointing an imaging tool at the machine's own disks
+ was never an option and was never attempted.)
+
+$ timeout 10 ocs-live-ver </dev/null
+///WARNING/// filesystem.squashfs not found! No idea where is LIVE MEDIA!!! Assume this is running in DRBL client.
+This program is intended to be run in Clonezilla Live! This environment is not Clonezilla live.
+Program terminated!
+(the ocs tools know when they are not in the live system
+ and refuse — the lab took the hint)
+
+$ timeout 8 clonezilla </dev/null
+Clonezilla mode is TERM environment variable needs set.
+"You have to specify a correct ocs_live_type (device-image or device-device)!"
+Program terminated!!
+(the dialog wizard that greets you in the live system
+ likewise declines to start here; chapter 6 therefore
+ teaches the wizard from the project's documentation
+ and the scripts' own usage text, and says so)

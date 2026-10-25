@@ -1,0 +1,41 @@
+$ partclone.ext4 -c -s src.img -o src.pcl
+Partclone v0.3.27 http://partclone.org
+Starting to clone device (src.img) to image (src.pcl)
+Elapsed: 00:00:02, Remaining: 00:00:00, Completed: 100.00%, Rate: 286.43MB/min,
+Current block: 2331, Total block: 16384, Complete: 100.00%
+Total Time: 00:00:02, Ave. Rate: 286.43MB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (src.img) to the image (src.pcl)
+Cloned successfully.
+(it walked all 16,384 blocks but wrote only the 2,331 in use)
+
+$ ls -l src.pcl
+-rw------- 1 root root 9549978 src.pcl
+(9.5 MB of image for a 64 MiB filesystem — the free blocks
+ were never copied. This is Clonezilla's whole economy.)
+
+$ partclone.ext4 -c -x zstd -s src.img -o src.pcl.zst
+Partclone successfully cloned the device (src.img) to the image (src.pcl.zst)
+(the same save, piped through zstd the way Clonezilla does)
+
+$ ls -l src.pcl.zst
+-rw-rw---- 1 root root 1050876 src.pcl.zst
+(1.05 MB. The 2 MiB of zeros and the filesystem metadata
+ compress away; the 1 MiB of random data does not, and
+ is most of what remains — honest arithmetic, not magic.)
+
+$ partclone.info src.pcl
+Partclone v0.3.27 http://partclone.org
+File system:  EXTFS
+Device size:   67.1 MB = 16384 Blocks
+Space in use:   9.5 MB = 2331 Blocks
+Free Space:    57.6 MB = 14053 Blocks
+Block size:   4096 Byte
+image format:    0002
+created on a:    64 bits platform
+with partclone:  v0.3.27
+bitmap mode:     BIT
+
+$ partclone.chkimg -s src.pcl
+Partclone successfully checked the image (src.pcl)
+Checked successfully.

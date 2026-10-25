@@ -1,0 +1,54 @@
+The lab could not use a real disk, and would not have
+pointed an imaging tool at one if it could. So it built
+a filesystem inside an ordinary file — no loop device,
+no mount — and imaged that. The files are invented and
+generic: a workshop's field-notes folder.
+
+$ find src-tree -type f | sort
+src-tree/data/blob.bin           (1 MiB from /dev/urandom: incompressible)
+src-tree/data/empty.txt          (0 bytes)
+src-tree/data/measurements.csv   (invented readings)
+src-tree/data/zeros.bin          (2 MiB of zeros: all too compressible)
+src-tree/documents/manual.md     (an invented manual page)
+src-tree/readme.txt
+
+$ sha256sum $(find src-tree -type f | sort)
+4e1970feeb8bd208410624b614978a646b7800064e16decc2f812468624ae911  src-tree/data/blob.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  src-tree/data/empty.txt
+30fadd62ac5d4c5e8443e438cc05c612f7776861e6d1b34584a5c5601f7a8f67  src-tree/data/measurements.csv
+5647f05ec18958947d32874eeb788fa396a05d0bab7c1b71f112ceb7e9b31eee  src-tree/data/zeros.bin
+bb9d18d1e0db900831060cd9522ff88f6381823ce6aaf7f49f0b9d5c6e51c435  src-tree/documents/manual.md
+b323cb7ee965b7136b4a81f29370a5edcc45ce59f0f52ee9ec8de665a856612e  src-tree/readme.txt
+
+$ truncate -s 64M src.img
+$ mkfs.ext4 -q -F -L FIELDNOTES -d src-tree src.img
+(mkfs.ext4's -d fills the new filesystem from a directory:
+ no mount, no loop device, the image is populated as made)
+
+$ ls -l src.img ; du -h src.img
+-rw-rw---- 1 root root 67108864 src.img
+5.2M	src.img          (the file is sparse: 64 MiB of address
+                        space, ~5 MiB actually written)
+
+$ dumpe2fs -h src.img
+Filesystem volume name:   FIELDNOTES
+Filesystem state:         clean
+Block count:              16384
+Free blocks:              14053
+Block size:               4096
+(2,331 of 16,384 blocks in use: 9.5 MB of the 64 MiB)
+
+$ debugfs -R 'ls -l /' src.img
+      2   40755 (2)      0      0    4096 25-Oct-2026 02:21 .
+     11   40700 (2)      0      0   16384 25-Oct-2026 02:21 lost+found
+     12   40770 (2)      0      0    4096 25-Oct-2026 02:21 data
+     17   40770 (2)      0      0    4096 25-Oct-2026 02:21 documents
+     19  100660 (1)      0      0      99 25-Oct-2026 02:21 readme.txt
+
+$ debugfs -R 'ls -l /data' src.img
+     13  100660 (1)      0      0   1048576 25-Oct-2026 02:21 blob.bin
+     14  100660 (1)      0      0         0 25-Oct-2026 02:21 empty.txt
+     15  100660 (1)      0      0        70 25-Oct-2026 02:21 measurements.csv
+     16  100660 (1)      0      0   2097152 25-Oct-2026 02:21 zeros.bin
+(debugfs reads the filesystem inside the file directly —
+ still no mount anywhere)

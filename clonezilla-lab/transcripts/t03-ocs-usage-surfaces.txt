@@ -1,0 +1,56 @@
+$ timeout 10 ocs-sr -h </dev/null
+/usr/sbin/ocs-sr: -h: invalid option
+Usage:
+To save or restore an image
+ocs-sr [OPTION] {savedisk|saveparts|restoredisk|restoreparts} IMAGE DEVICE
+IMAGE is the image dir name in /home/partimag, not absolute path
+DEVICE name can be with or without /dev/, e.g., /dev/sda or sda.
+...
+ Options for saving:
+ -noabo, --not-only-access-by-owner   Make the image of partition can be accessed by others, not only by owner...
+ -enc, --enc-ocs-img  To encrypt the image with passphrase.
+ -gm, --gen-md5sum   Generate the MD5 checksum for the image...
+ -gs, --gen-sha1sum  Generate the SHA1 checksum for the image...
+ -i, --image-size SIZE  Set the size in MB to split the partition image file into multiple volumes files. For the FAT32 image repository, the SIZE should not be larger than 4096.
+ -q, --use-ntfsclone      If the partition to be saved is NTFS, use program ntfsclone instead of partimage (i.e. Priority: ntfsclone > partimage > dd)
+ -q1, --force-to-use-dd   Force to use dd to save partition(s) (inefficient method, very slow, but works for all the file system).
+ -z0, --no-compress       Don't compress when saving: very fast but very big image file (NOT compatible with multicast restoring!!!)
+ -z1, --gzip-compress     Compress using gzip when saving: fast and small image file (default)
+ -z1p, --smp-gzip-compress  Compress using parallel gzip program (pigz)...
+ -z2, --bz2-compress      Compress using bzip2 when saving: slow but smallest image file
+ -z2p, --smp-bzip2-compress  Compress using parallel bzip2 program (lbzip2)...
+ -z3, --lzo-compress ...  -z4, --lzma-compress ...  -z5, --xz-compress ...
+ -z5p, --smp-xz-compress ...  -z6, --lzip-compress ...  -z6p, --smp-lzip-compress ...
+ -z7, --lrzip-compress ...  -z8, --lz4-compress ...  -z8p, --lz4mt-compress ...
+ -z9, --zstd-compress     Compress using zstd when saving.
+ -z9p, --zstdmt-compress  Compress using zstdmt when saving.
+(the full usage runs to hundreds of lines: restore options,
+ multicast options, post-action options, checksums...)
+
+$ bash usr/sbin/ocs-sr -h   (the copy extracted from the 3.3.3-37 ISO itself)
+usr/sbin/ocs-sr: -h: invalid option
+Usage:
+To save or restore an image
+ocs-sr [OPTION] {savedisk|saveparts|restoredisk|restoreparts} IMAGE DEVICE
+(same grammar in the live system's own 5.18.11 build)
+
+$ partclone.ext4 --version
+Partclone : v0.3.27 (0882b2de94f05d3ad81304872cbd3dff02105239)
+
+$ partclone.ext4 --help
+unset_name v0.3.27 http://partclone.org
+Usage: unset_name [OPTIONS]
+    Efficiently clone to an image, device or standard output.
+
+    -o,  --output FILE      Output FILE
+    -O   --overwrite FILE   Output FILE, overwriting if exists
+    -W   --restore_raw_file create special raw file for loop device
+    -s,  --source FILE      Source FILE
+    -L,  --logfile FILE     Log FILE
+    -c,  --clone            Save to the special image format
+    -x,  --compresscmd CMD  Start CMD as an output pipe to compress the cloned image
+    -r,  --restore          Restore from the special image format
+    -b,  --dev-to-dev       Local device to device copy mode
+    -D,  --domain           Create ddrescue domain log from source device
+    -R,  --rescue           Continue clone while disk read errors
+    ...
