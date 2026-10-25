@@ -1,6 +1,7 @@
 site_name: Clonezilla for Mere Mortals
 site_description: Whole-disk imaging with a live system you boot from a stick. Saving a disk or its partitions into an image that holds only the blocks in use, keeping that image honestly, checking it before you trust it, and restoring it onto the same disk or a new one, with the limits stated plainly.
 site_url: https://paulsullivan33-dev.github.io/clonezilla-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
 
 # Guides live at the repo root (nice for GitHub browsing).
 # The deploy workflow copies them into docs/ before building.
